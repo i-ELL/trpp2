@@ -1,0 +1,158 @@
+#include <iostream>
+#include <math.h>
+#include <windows.h>
+#include <string>
+#include <fstream>
+#include <algorithm>
+
+using namespace std;
+char letters[1000000], temp;
+int task_num;
+long double S, r, n, p, m;
+string str;
+int counter5 = 0;
+string alph = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
+bool b, t5 = false;
+int c = 0;
+
+bool numbers(char var) {
+    if (var == '0' or var == '1' or var == '2' or var == '3' or var == '4' or var == '5' or var == '6' or var == '7' or
+        var == '8' or var == '9') {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+int main() {
+    SetConsoleOutputCP(CP_UTF8);
+    cout << "Введите номер задания\n" << "1. Заем\n" << "2. Ссуда\n" << "3. Копирование файла\n" << "4. Фильтр\n"
+         << "5. Сортировка букв\n";
+    cin >> task_num;
+    while (task_num) {
+        if (task_num == 1) {
+            cout << "Введите S,p,n" << endl;
+            cin >> S >> p >> n;
+            if (S > 0 and n > 0) {
+                if (p == 0) {
+                    cout << S / (12 * n) << endl;
+                } else {
+                    r = p / 100.;
+                    m = (S * r * (pow(1 + r, n))) / (12 * ((pow(1 + r, n)) - 1));
+                    cout << "Месячная выплата равна   " << m << endl;
+                }
+            } else {
+                cout << "Некорректный ввод, осуждаю" << endl;
+            }
+            task_num = 6;
+        }
+        if (task_num == 2) {
+            cout << "Введите S,m,n" << endl;
+            cin >> S >> m >> n;
+            if (S > 0 and n > 0) {
+                double p = 1, r = 0, x, k = 1;
+                while (r < 10) {
+                    c += 1;
+
+                    if (k > 0.00001) {
+                        r = p / 100;
+                        x = (S * r * (pow(1 + r, n))) / (12 * ((pow(1 + r, n)) - 1));
+                        if (x > m - 0.0001 and x < m + 0.0001 or x == m) {
+                            cout << p << endl;
+                            break;
+                        } else if (x > m) {
+                            p -= k;
+                            k = k / 10;
+                        } else if (x < m) {
+                            p += k;
+                        }
+                    } else {
+                        cout << p << endl;
+                        break;
+                    }
+                }
+            } else {
+                cout << "Некорректный ввод :(" << endl;
+            }
+            cout<<c<<endl;
+        }
+
+        if (task_num == 3) {
+            fstream task3("C:\\Users\\konno\\CLionProjects\\hw3\\3.txt");
+            while (!task3.eof()) {
+                //int thousand=1000;
+                //while (thousand>0){
+                //   task3<<thousand<<"-7"<<endl;
+                //   thousand-=7;
+                // }
+                getline(task3, str);
+                cout << str << endl;
+            }
+        }
+        if (task_num == 4) {
+            fstream task4("C:\\Users\\konno\\CLionProjects\\hw3\\4.txt");
+            while (!task4.eof()) {
+                getline(task4, str);
+                b = true;
+                for (int i = 0; i <= str.size(); i++) {
+                    if (numbers(str[i])) {
+                        cout << str[i];
+                        t5 = true;
+                    } else if (b == true) {
+                        if (i != 0) {
+                            if (t5 == true) {
+                                cout << " ";
+                                b = false;
+                            }
+                        }
+                    }
+                }
+                if (t5 == true) {
+                    cout << "\n";
+                    t5 = false;
+                }
+            }
+            cout << "\n";
+        }
+        if (task_num == 5) {
+            fstream task5("C:\\Users\\konno\\CLionProjects\\hw3\\5.txt");
+            getline(task5, str);
+            cout << str << endl;
+            int n = size(str);
+            for (int i = 0; i < n; i++) {
+                letters[i] = str[i];
+            }
+            for (int i = 0; i < n - 1; i++) {
+                for (int j = i + 1; j < n; j++) {
+                    if (alph.find(letters[i]) != -1) {
+                        int s = tolower(letters[i]) - tolower(letters[j]);
+                        if (s == 0) {
+                            s = letters[i] - letters[j];
+                        }
+                        if (s > 0) {
+                            temp = letters[i];
+                            letters[i] = letters[j];
+                            letters[j] = temp;
+                        }
+                    } else {
+                        letters[i] = ' ';
+                        counter5 += 1;
+                    }
+                }
+            }
+            letters[n] = ' ';
+            for (int i = 0; i < n; i++) {
+                if (letters[i] != ' ') {
+                    cout << letters[i];
+                }
+            }
+            cout << "\n";
+        }
+        cout << "Введите номер задания\n" << "1. Заем\n" << "2. Ссуда\n" << "3. Копирование файла\n" << "4. Фильтр\n"
+             << "5. Сортировка букв\n";
+        cout << "Для выхода введите 0\n";
+        cin >> task_num;
+    }
+
+    return 0;
+}
